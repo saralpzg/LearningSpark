@@ -16,8 +16,7 @@ if __name__ == "__main__":
              .getOrCreate())
     # Get the M&M data set filename from the command-line arguments
     # mnm_file = sys.argv[1]
-    mnm_file = 
-    print(mnm_file)
+    mnm_file = "C:\\Users\\sara.lopez\\Desktop\\Formación\\LearningSpark\\data\\mnm_dataset.csv"
     # Read the file into a Spark DataFrame using the CSV
     # format by inferring the schema and specifying that the
     # file contains a header, which provides column names for comma-
@@ -26,7 +25,6 @@ if __name__ == "__main__":
               .option("header", "true")
               .option("inferSchema", "true")
               .load(mnm_file))
-    print("Hago el load")
     # We use the DataFrame high-level APIs. Note
     # that we don't use RDDs at all. Because some of Spark's
     # functions return the same object, we can chain function calls.
