@@ -50,8 +50,8 @@ if __name__ == "__main__":
     print(fire_df.schema)
 
     # Guardar el DataFrame en un archivo Parquet
-    # parquet_path = "C:\\Users\\sara.lopez\\Desktop\\Formación\\LearningSpark\\Python\\Chapter3\\Parquet_Fire_Python"
-    # fire_df.write.format("parquet").save(parquet_path)
+    parquet_path = "C:\\Users\\sara.lopez\\Desktop\\Formación\\LearningSpark\\Python\\Chapter3\\Parquet_Fire_Python"
+    fire_df.coalesce(2).write.format("parquet").save(parquet_path) # Ahora sólo me escribo 2 archivos
 
     # how many distinct CallTypes were recorded as the causes of the fire calls?
     fire_df.groupby("CallType").agg(count("CallType").alias("DistinctCallTypes")).show()

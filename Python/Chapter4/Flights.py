@@ -7,17 +7,16 @@ if __name__ == '__main__':
     spark = SparkSession.builder.appName("FlightsApp").getOrCreate()
 
     csv_path = "C:\\Users\\sara.lopez\\Desktop\\Formación\\LearningSpark\\data\\departuredelays.csv"
-    df = spark.read.format("csv").option("inferSchema", True).option("header", True).load(csv_path)
+    schema = "`date` STRING, `delay` INT, `distance` INT, `origin` STRING, `destination` STRING"
+    df = spark.read.format("csv").option("header", True).schema(schema).load(csv_path)
+    # Probar a pasarle el esquema de string
     df.show()
     df.printSchema()
     # Probamos a reformatear la columna de la fecha
-    # Cast la fecha de entero a string
-    formato = df.withColumn("DATE_STR", df["date"].cast(StringType())).drop("date")
-    formato.printSchema()
     # Cast la fecha de string a date
-    formato2 = formato.withColumn("DATE", to_timestamp(col("DATE_STR"), "MMddhhmm")).drop("DATE_STR")
-    formato2.printSchema()
-    formato2.show()
+    formato = df.withColumn("date_format", to_timestamp(col("date"), "MMddhhmm")).drop("date")
+    formato.printSchema()
+    formato.show()
 
     # Crear una vista temporal
     df.createOrReplaceTempView("us_delay_flights_tbl")
@@ -50,11 +49,12 @@ if __name__ == '__main__':
     # Managed table
     schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
     flights_df = spark.read.csv(csv_path, schema=schema)
-    # flights_df.write.saveAsTable("managed_us_delay_flights_tbl")
+    flights_df.write.saveAsTable("managed_us_delay_flights_tbl")
 
     # Unmanaged table
     (flights_df
      .write
+     .mode("overwrite")
      .option("path", "/tmp/data/us_flights_delay")
      .saveAsTable("us_delay_flights_tbl"))
 
@@ -70,10 +70,10 @@ if __name__ == '__main__':
     spark.read.table("us_origin_airport_JFK_tmp_view").show()
 
     print("Ver los metadatos de Catalog:")
-    spark.catalog.listDatabases()
-    spark.catalog.listTables()
+    print(spark.catalog.listDatabases())
+    print(spark.catalog.listTables())
     # spark.catalog.listColumns("managed_us_delay_flights_tbl")
-    spark.catalog.listColumns("us_delay_flights_tbl")
+    print(spark.catalog.listColumns("us_delay_flights_tbl"))
 
     print("Proceso inverso: de tablas a DataFrames")
     # DataFrame de las filas de vuelos con destino Atlanta (ATL)
