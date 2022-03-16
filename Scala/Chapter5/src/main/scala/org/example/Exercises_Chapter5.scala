@@ -18,9 +18,9 @@ object Exercises_Chapter5 {
     // Create DataFrame with two rows of two arrays (tempc1, tempc2)
     val t1 = Array(35, 36, 32, 30, 40)
     val t2 = Array(31, 32, 34, 55, 56)
-    val tC = Seq(t1, t2).toDF("celsius")
-    tC.createOrReplaceTempView("tC")
-    tC.show()
+//    val tC = Seq(t1, t2).toDF("celsius")
+//    tC.createOrReplaceTempView("tC")
+//    tC.show()
 
   }
 
